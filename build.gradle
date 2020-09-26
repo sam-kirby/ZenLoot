@@ -1,0 +1,72 @@
+buildscript {
+    repositories {
+        jcenter()
+        maven { url = "https://files.minecraftforge.net/maven" }
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+    }
+}
+
+plugins {
+    id 'com.wynprice.cursemaven' version '2.1.4'
+}
+
+apply plugin: 'net.minecraftforge.gradle.forge'
+
+def buildnumber = null
+
+if (System.getenv('GITHUB_ACTIONS'))
+    buildnumber = System.getenv('GITHUB_WORKFLOW') == 'Release' ? System.getenv('GITHUB_RUN_NUMBER') : System.getenv('GITHUB_SHA').substring(0, 7)
+
+def suffix = buildnumber != null ? buildnumber : 'SNAPSHOT'
+
+version = "$version_base-$suffix"
+group = 'uk.bobbytables.zenloot'
+archivesBaseName = 'zenloot'
+
+sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
+
+minecraft {
+    version = "1.12.2-14.23.5.2838"
+    runDir = "run"
+
+    mappings = "stable_39"
+    makeObfSourceJar = false
+
+    replaceIn "ZenLoot.java"
+    replace "@VERSION@", project.version
+}
+
+repositories {
+    maven {
+        name 'CraftTweaker'
+        url 'https://maven.blamejared.com'
+    }
+}
+
+dependencies {
+    deobfCompile 'CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.9.6'
+    deobfCompile 'curse.maven:zenstages-0.5.0:2974926'
+}
+
+processResources {
+    // this will ensure that this task is redone when the versions change.
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
+    inputs.property "displayName", project.displayName
+    inputs.property "id", project.archivesBaseName
+
+    // replace stuff in mcmod.info, nothing else
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+
+        // replace version and mcversion
+        expand 'version':project.version, 'mcversion':project.minecraft.version, 'name':project.displayName, 'id':project.archivesBaseName
+    }
+
+    // copy everything else except the mcmod.info
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
+}

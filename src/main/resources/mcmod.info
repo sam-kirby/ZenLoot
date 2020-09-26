@@ -1,0 +1,16 @@
+[
+{
+  "modid": "zenloot",
+  "name": "ZenLoot",
+  "description": "Full access to Loot Tables from ZenScript",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["ExampleDude"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
