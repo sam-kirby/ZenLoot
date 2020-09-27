@@ -6,6 +6,7 @@ import net.minecraftforge.server.command.CommandTreeBase;
 public class ZenLootCommand extends CommandTreeBase {
     public ZenLootCommand() {
         this.addSubcommand(new CommandDumpLoot());
+        this.addSubcommand(new CommandChest());
     }
 
     @Override
