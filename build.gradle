@@ -43,11 +43,18 @@ repositories {
         name 'CraftTweaker'
         url 'https://maven.blamejared.com'
     }
+    maven {
+        name 'MCModDev'
+        url 'https://maven.mcmoddev.com/'
+    }
 }
 
 dependencies {
-    deobfCompile 'CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.9.6'
-    deobfCompile 'curse.maven:zenstages-0.5.0:2974926'
+    deobfCompile 'CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.+'
+
+    deobfCompile 'net.darkhax.bookshelf:Bookshelf-1.12.2:2.3.+'
+    compile 'net.darkhax.gamestages:GameStages-1.12.2:2.0.+:deobf'
+    compile 'net.darkhax.itemstages:ItemStages-1.12.2:2.0.+:deobf'
 }
 
 processResources {
