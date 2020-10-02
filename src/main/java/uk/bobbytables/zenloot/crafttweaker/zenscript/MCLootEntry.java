@@ -4,7 +4,6 @@ import crafttweaker.CraftTweakerAPI;
 import crafttweaker.annotations.ZenRegister;
 import crafttweaker.api.item.IItemStack;
 import crafttweaker.api.minecraft.CraftTweakerMC;
-import net.darkhax.gamestages.world.storage.loot.conditions.LootConditionStaged;
 import net.darkhax.itemstages.ItemStages;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -19,6 +18,7 @@ import net.minecraft.world.storage.loot.functions.SetNBT;
 import stanhebben.zenscript.annotations.Optional;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
+import uk.bobbytables.zenloot.loot.conditions.Staged;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,9 +50,14 @@ public class MCLootEntry {
         this.name = name;
     }
 
+    @ZenMethod
+    public static MCLootEntry fromItemStack(IItemStack iItemStack, @Optional String name) {
+        return new MCLootEntry(CraftTweakerMC.getItemStack(iItemStack), name);
+    }
+
     public LootEntryItem build() {
         if (this.autoStage) {
-            this.lootConditions.add(new LootConditionStaged(ItemStages.getStage(itemStack)));
+            this.lootConditions.add(new Staged(ItemStages.getStage(itemStack)));
         }
         return new LootEntryItem(
                 this.item,
@@ -65,11 +70,6 @@ public class MCLootEntry {
     }
 
     @ZenMethod
-    public static MCLootEntry fromItemStack(IItemStack iItemStack, @Optional String name) {
-        return new MCLootEntry(CraftTweakerMC.getItemStack(iItemStack), name);
-    }
-
-    @ZenMethod
     public MCLootEntry setDamage(float min, float max) {
         if (this.lootFunctions.stream().noneMatch(lootFunction -> lootFunction.getClass().equals(SetDamage.class))) {
             if (min < max && max <= 1.0 && min > 0.0) {
@@ -77,8 +77,7 @@ public class MCLootEntry {
             } else {
                 CraftTweakerAPI.logError(String.format("Tried to set an invalid damage for %s - must be 0.0 - 1.0", this.item.getRegistryName()));
             }
-        }
-        else
+        } else
             CraftTweakerAPI.logError(String.format("Tried to setDamage twice for %s", this.item.getRegistryName()));
         return this;
     }
@@ -93,11 +92,11 @@ public class MCLootEntry {
     }
 
     @ZenMethod
-    public MCLootEntry setStaged(@Optional String stageName) {
+    public MCLootEntry setStage(@Optional String stageName) {
         if (stageName == null) {
             this.autoStage = true;
         } else {
-            this.lootConditions.add(new LootConditionStaged(stageName));
+            this.lootConditions.add(new Staged(stageName));
         }
         return this;
     }

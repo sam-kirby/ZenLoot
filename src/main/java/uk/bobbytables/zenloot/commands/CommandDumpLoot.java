@@ -48,9 +48,9 @@ public class CommandDumpLoot extends CommandBase {
         allTables.addAll(ZenLootMod.UNREGISTERED_LOOT_TABLES);
 
         for (ResourceLocation tableId : allTables) {
-            File resourceDir = new File(outDir, tableId.getNamespace());
+            File resourceDir = new File(outDir, tableId.getResourceDomain());
 
-            String[] fileName = tableId.getPath().split("/");
+            String[] fileName = tableId.getResourcePath().split("/");
             if (fileName.length > 1) {
                 String[] subDirs = Arrays.copyOfRange(fileName, 0, fileName.length - 1);
                 for (String subDir : subDirs) {

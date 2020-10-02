@@ -24,7 +24,7 @@ public class Not implements LootCondition {
     }
 
     public static class Serializer extends LootCondition.Serializer<Not> {
-        protected Serializer() {
+        public Serializer() {
             super(new ResourceLocation(Reference.MOD_ID, "not"), Not.class);
         }
 

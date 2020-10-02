@@ -13,8 +13,12 @@ import net.minecraft.world.storage.loot.conditions.LootConditionManager;
 import net.minecraft.world.storage.loot.functions.LootFunction;
 import net.minecraft.world.storage.loot.functions.LootFunctionManager;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import uk.bobbytables.zenloot.commands.ZenLootCommand;
+import uk.bobbytables.zenloot.loot.conditions.Not;
+import uk.bobbytables.zenloot.loot.conditions.Or;
+import uk.bobbytables.zenloot.loot.conditions.Staged;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -39,6 +43,13 @@ public class ZenLootMod {
     public static final Set<ResourceLocation> UNREGISTERED_LOOT_TABLES = new HashSet<>();
     @Mod.Instance(Reference.MOD_ID)
     public static ZenLootMod INSTANCE;
+
+    @Mod.EventHandler
+    public void onPreInit(FMLPreInitializationEvent event) {
+        LootConditionManager.registerCondition(new Or.Serializer());
+        LootConditionManager.registerCondition(new Not.Serializer());
+        LootConditionManager.registerCondition(new Staged.Serializer());
+    }
 
     @Mod.EventHandler
     public void onServerStarting(FMLServerStartingEvent event) {

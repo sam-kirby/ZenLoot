@@ -26,7 +26,7 @@ public class Or implements LootCondition {
     }
 
     public static class Serializer extends LootCondition.Serializer<Or> {
-        protected Serializer() {
+        public Serializer() {
             super(new ResourceLocation(Reference.MOD_ID, "or"), Or.class);
         }
 

@@ -7,6 +7,7 @@ import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.apache.logging.log4j.LogManager;
 import uk.bobbytables.zenloot.ZenLootMod;
+import uk.bobbytables.zenloot.crafttweaker.zenscript.MCLootTable;
 
 @Mod.EventBusSubscriber
 public class Loot {
@@ -20,6 +21,9 @@ public class Loot {
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onLootTableLoad(LootTableLoadEvent event) {
-
+        MCLootTable.MODIFIED_TABLES.stream()
+                .filter(mcLootTable -> mcLootTable.getId().equals(event.getName()))
+                .findFirst()
+                .ifPresent(mcLootTable -> mcLootTable.getLootPools().forEach(mcLootPool -> mcLootPool.process(event.getTable())));
     }
 }
