@@ -79,9 +79,3 @@ processResources {
         exclude 'mcmod.info'
     }
 }
-
-jar {
-    manifest {
-        attributes 'FMLAT': 'zenloot_at.cfg'
-    }
-}
