@@ -27,5 +27,20 @@ public abstract class MCLootPool {
         return this;
     }
 
+    @ZenMethod
+    public MCLootPool clear() {
+        this.lootEntries.clear();
+        return this;
+    }
+
+    @ZenMethod
+    public MCLootPool setRolls(int min, int max) {
+        return this;
+    }
+
+    public MCLootPool setBonusRolls(int min, int max) {
+        return this;
+    }
+
     public abstract void process(LootTable table);
 }

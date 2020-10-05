@@ -34,6 +34,8 @@ minecraft {
     mappings = "snapshot_20171003"
     makeObfSourceJar = false
 
+    useDepAts = true
+
     replaceIn "Reference.java"
     replace "@VERSION@", project.version
 }
@@ -69,11 +71,17 @@ processResources {
         include 'mcmod.info'
 
         // replace version and mcversion
-        expand 'version':project.version, 'mcversion':project.minecraft.version, 'name':project.displayName, 'id':project.archivesBaseName
+        expand 'version': project.version, 'mcversion': project.minecraft.version, 'name': project.displayName, 'id': project.archivesBaseName
     }
 
     // copy everything else except the mcmod.info
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
+    }
+}
+
+jar {
+    manifest {
+        attributes 'FMLAT': 'zenloot_at.cfg'
     }
 }
