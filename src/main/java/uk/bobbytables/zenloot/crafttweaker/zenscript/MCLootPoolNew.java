@@ -1,6 +1,7 @@
 package uk.bobbytables.zenloot.crafttweaker.zenscript;
 
 import crafttweaker.annotations.ZenRegister;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.LootEntry;
 import net.minecraft.world.storage.loot.LootPool;
 import net.minecraft.world.storage.loot.LootTable;
@@ -18,7 +19,7 @@ public class MCLootPoolNew extends MCLootPool {
     }
 
     @Override
-    public void process(LootTable table) {
+    public void process(LootTable table, ResourceLocation ignored) {
         table.addPool(new LootPool(
                 this.lootEntries.stream().map(MCLootEntry::build).toArray(LootEntry[]::new),
                 new LootCondition[]{},

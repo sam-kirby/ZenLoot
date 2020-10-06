@@ -5,6 +5,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.RandomValueRange;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
+import uk.bobbytables.zenloot.util.tablematchers.PatternTableMatcher;
+import uk.bobbytables.zenloot.util.tablematchers.SimpleTableMatcher;
+import uk.bobbytables.zenloot.util.tablematchers.TableMatcher;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,16 +17,21 @@ import java.util.Optional;
 @ZenClass("mods.zenloot.LootTable")
 public class MCLootTable {
     public static final List<MCLootTable> MODIFIED_TABLES = new ArrayList<>();
+    public static final List<MCLootTable> MODIFIED_EARLY = new ArrayList<>();
 
-    private final ResourceLocation id;
+    private final TableMatcher matcher;
     private final List<MCLootPool> lootPools = new ArrayList<>();
 
     public MCLootTable(ResourceLocation id) {
-        this.id = id;
+        this.matcher = new SimpleTableMatcher(id);
     }
 
-    public ResourceLocation getId() {
-        return id;
+    public MCLootTable(String pattern) {
+        this.matcher = new PatternTableMatcher(pattern);
+    }
+
+    public boolean matches(ResourceLocation tableLoc) {
+        return this.matcher.matches(tableLoc);
     }
 
     public List<MCLootPool> getLootPools() {
@@ -33,6 +41,20 @@ public class MCLootTable {
     @ZenMethod
     public static MCLootTable edit(String id) {
         MCLootTable lootTable = new MCLootTable(new ResourceLocation(id));
+        MODIFIED_TABLES.add(lootTable);
+        return lootTable;
+    }
+
+    @ZenMethod
+    public static MCLootTable editEarly(String id) {
+        MCLootTable lootTable = new MCLootTable(new ResourceLocation(id));
+        MODIFIED_EARLY.add(lootTable);
+        return lootTable;
+    }
+
+    @ZenMethod
+    public static MCLootTable editAllMatching(String pattern) {
+        MCLootTable lootTable = new MCLootTable(pattern);
         MODIFIED_TABLES.add(lootTable);
         return lootTable;
     }

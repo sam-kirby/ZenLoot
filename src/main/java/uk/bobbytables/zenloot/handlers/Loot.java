@@ -19,11 +19,19 @@ public class Loot {
         }
     }
 
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public static void onLootTableLoadEarly(LootTableLoadEvent event) {
+        MCLootTable.MODIFIED_EARLY.stream()
+                .filter(mcLootTable -> mcLootTable.matches(event.getName()))
+                .findFirst()
+                .ifPresent(mcLootTable -> mcLootTable.getLootPools().forEach(mcLootPool -> mcLootPool.process(event.getTable(), event.getName())));
+    }
+
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onLootTableLoad(LootTableLoadEvent event) {
         MCLootTable.MODIFIED_TABLES.stream()
-                .filter(mcLootTable -> mcLootTable.getId().equals(event.getName()))
+                .filter(mcLootTable -> mcLootTable.matches(event.getName()))
                 .findFirst()
-                .ifPresent(mcLootTable -> mcLootTable.getLootPools().forEach(mcLootPool -> mcLootPool.process(event.getTable())));
+                .ifPresent(mcLootTable -> mcLootTable.getLootPools().forEach(mcLootPool -> mcLootPool.process(event.getTable(), event.getName())));
     }
 }

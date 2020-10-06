@@ -2,6 +2,7 @@ package uk.bobbytables.zenloot.crafttweaker.zenscript;
 
 import crafttweaker.CraftTweakerAPI;
 import crafttweaker.annotations.ZenRegister;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.LootEntry;
 import net.minecraft.world.storage.loot.LootPool;
 import net.minecraft.world.storage.loot.LootTable;
@@ -26,10 +27,10 @@ public class MCLootPoolExisting extends MCLootPool {
     }
 
     @Override
-    public void process(LootTable table) {
+    public void process(LootTable table, ResourceLocation tableLoc) {
         LootPool pool = table.getPool(this.getName());
         if (pool == null) {
-            CraftTweakerAPI.logError("Tried to modify a pool that doesn't exist");
+            CraftTweakerAPI.logError(String.format("Tried to modify a pool (%s) that doesn't exist in table %s", this.getName(), tableLoc));
             return;
         }
 
